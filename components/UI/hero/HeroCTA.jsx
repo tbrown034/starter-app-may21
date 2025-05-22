@@ -22,6 +22,9 @@ export default function HeroCTA() {
         </h3>
         <div className="flex gap-4">
           <button className="p-2 border-2 border-black rounded-lg hover:bg-gray-100 active:bg-gray-200 cursor-pointer transition">
+            Lists
+          </button>
+          <button className="p-2 border-2 border-black rounded-lg hover:bg-gray-100 active:bg-gray-200 cursor-pointer transition">
             Discover
           </button>
         </div>
