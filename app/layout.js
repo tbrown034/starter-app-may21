@@ -14,9 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "ReflectYr - Work in Progress",
+  title: "TrevorStack",
   description:
-    "Your end-of-year entertainment ranking tool - currently under construction.",
+    "Template using Nextjs, react, tailwind, authjs, neon, vercel, postgres with latest versions as of at least May 21, 2025.",
   icons: {
     icon: "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚧</text></svg>",
   },

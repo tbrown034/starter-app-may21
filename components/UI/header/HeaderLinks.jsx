@@ -1,15 +1,24 @@
+"use client";
+import Link from "next/link";
+
 export default function HeaderLinks() {
+  const links = [
+    { title: "About", href: "/about" },
+    { title: "Profile", href: "/profile" },
+    { title: "FAQ", href: "/faq" },
+  ];
+
   return (
-    <nav className="flex gap-4 text-sm text-gray-600 dark:text-gray-300">
-      <a href="/about" className="hover:underline">
-        About
-      </a>
-      <a href="/profile" className="hover:underline">
-        Profile
-      </a>
-      <a href="/faq" className="hover:underline">
-        FAQ
-      </a>
+    <nav className="flex gap-4 text-sm text-gray-700 dark:text-gray-300">
+      {links.map(({ title, href }) => (
+        <Link
+          key={href}
+          href={href}
+          className="hover:underline hover:text-black dark:hover:text-white transition-colors cursor-pointer"
+        >
+          {title}
+        </Link>
+      ))}
     </nav>
   );
 }
