@@ -1,6 +1,7 @@
 import ProfileButton from "@/components/buttons/ProfileButton";
 import SignInButton from "@/components/buttons/SignInButton";
 import SignOutButton from "@/components/buttons/SignOutButton";
+import Link from "next/link";
 
 export default function HeroCTA() {
   return (
@@ -18,15 +19,21 @@ export default function HeroCTA() {
 
       <div>
         <h3 className="text-sm font-semibold uppercase text-gray-500 mb-2">
-          Explore
+          Dashboard
         </h3>
         <div className="flex gap-4">
-          <button className="p-2 border-2 border-black rounded-lg dark:border-white hover:bg-gray-100 active:bg-gray-200 cursor-pointer transition dark:hover:bg-gray-700 dark:active:bg-gray-600">
+          <Link
+            href="/dashboard"
+            className="p-2 border-2 border-black rounded-lg dark:border-white hover:bg-gray-100 active:bg-gray-200 cursor-pointer transition dark:hover:bg-gray-700 dark:active:bg-gray-600"
+          >
             Lists
-          </button>
-          <button className="p-2 border-2 border-black rounded-lg dark:border-white hover:bg-gray-100 active:bg-gray-200 cursor-pointer transition dark:hover:bg-gray-700 dark:active:bg-gray-600">
-            Discover
-          </button>
+          </Link>
+          <Link
+            href="/about"
+            className="p-2 border-2 border-black rounded-lg dark:border-white hover:bg-gray-100 active:bg-gray-200 cursor-pointer transition dark:hover:bg-gray-700 dark:active:bg-gray-600"
+          >
+            About
+          </Link>
         </div>
       </div>
     </div>
