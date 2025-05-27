@@ -41,9 +41,9 @@ export default function About() {
               </p>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
                 The template emphasizes clean code architecture, responsive
-                design, and modern development patterns. It's designed to be
-                both a learning resource and a production-ready starting point
-                for new projects.
+                design, and modern development patterns. It&apos;s designed to
+                be both a learning resource and a production-ready starting
+                point for new projects.
               </p>
               <p className="text-gray-600 dark:text-gray-400">
                 Originally created as a template for entertainment ranking

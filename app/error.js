@@ -26,8 +26,8 @@ export default function Error({ error, reset }) {
             Oops! An Error Occurred
           </h1>
           <p className="text-gray-600 dark:text-gray-400 text-lg mb-6">
-            We encountered an unexpected error. Don't worry, it's not your
-            fault.
+            We encountered an unexpected error. Don&apos;t worry, it&apos;s not
+            your fault.
           </p>
         </div>
 
