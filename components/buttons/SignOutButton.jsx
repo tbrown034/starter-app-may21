@@ -1,12 +1,19 @@
-import Link from "next/link";
+import { signOut } from "@/auth";
 
 export default function SignOutButton() {
   return (
-    <Link
-      href="/api/auth/signout"
-      className="p-2 border-2 border-black rounded-lg dark:border-white  hover:bg-gray-100 active:bg-gray-200 cursor-pointer dark:hover:bg-gray-700 dark:active:bg-gray-600 transition"
+    <form
+      action={async () => {
+        "use server";
+        await signOut();
+      }}
     >
-      Sign Out
-    </Link>
+      <button
+        type="submit"
+        className="p-2 border-2 border-black dark:border-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+      >
+        Sign Out
+      </button>
+    </form>
   );
 }

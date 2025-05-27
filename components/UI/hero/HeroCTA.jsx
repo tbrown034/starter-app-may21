@@ -1,4 +1,4 @@
-import ProfileButton from "@/components/buttons/ProfileButton";
+import ProfileStatusButton from "@/components/buttons/ProfileStatusButton";
 import SignInButton from "@/components/buttons/SignInButton";
 import SignOutButton from "@/components/buttons/SignOutButton";
 import Link from "next/link";
@@ -6,14 +6,16 @@ import Link from "next/link";
 export default function HeroCTA() {
   return (
     <div className="flex flex-col gap-8 items-center">
-      <div>
+      <div className="flex flex-col gap-4">
         <h3 className="text-sm font-semibold uppercase text-gray-500 dark:text-gray-400 mb-3">
           Account
         </h3>
-        <div className="flex gap-4 flex-wrap justify-center">
-          <SignInButton />
-          <SignOutButton />
-          <ProfileButton />
+        <div className="flex flex-col gap-2">
+          <div className="flex gap-4">
+            <SignInButton />
+            <SignOutButton />
+          </div>
+          <ProfileStatusButton />
         </div>
       </div>
 

@@ -1,8 +1,19 @@
-"use client";
+import { signIn } from "@/auth";
+
 export default function SignInButton() {
   return (
-    <button className="p-2 border-2 border-black rounded-lg dark:border-white dark:hover:bg-gray-700 dark:active:bg-gray-600 hover:bg-gray-100 active:bg-gray-200 cursor-pointer transition">
-      Sign In
-    </button>
+    <form
+      action={async () => {
+        "use server";
+        await signIn("google");
+      }}
+    >
+      <button
+        type="submit"
+        className="p-2 border-2 border-black dark:border-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+      >
+        Sign in
+      </button>
+    </form>
   );
 }
