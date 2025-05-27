@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/UI/footer/Footer";
 import Header from "@/components/UI/header/Header";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,13 +25,58 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                console.log('🎨 Theme Init Script: Starting theme initialization');
+
+                try {
+                  var theme = localStorage.getItem('theme');
+                  var isDarkSystem = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+                  console.log('🎨 Theme Init Script: Found saved theme:', theme);
+                  console.log('🎨 Theme Init Script: System preference is dark:', isDarkSystem);
+
+                  document.documentElement.classList.remove('light', 'dark');
+
+                  if (theme === 'light') {
+                    document.documentElement.classList.add('light');
+                    console.log('🎨 Theme Init Script: Applied light theme');
+                  } else if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                    console.log('🎨 Theme Init Script: Applied dark theme');
+                  } else {
+                    if (isDarkSystem) {
+                      document.documentElement.classList.add('dark');
+                      console.log('🎨 Theme Init Script: Applied system dark theme');
+                    } else {
+                      document.documentElement.classList.add('light');
+                      console.log('🎨 Theme Init Script: Applied system light theme');
+                    }
+                  }
+
+                  console.log('🎨 Theme Init Script: Theme initialization completed successfully');
+                } catch (e) {
+                  console.error('🎨 Theme Init Script: Error during initialization:', e);
+                  document.documentElement.classList.add('light');
+                  console.log('🎨 Theme Init Script: Fallback to light mode applied');
+                }
+              })();
+            `,
+          }}
+        />
+      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col items-center justify-between min-h-screen`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased dark:bg-gray-900 flex flex-col items-center justify-between min-h-screen`}
       >
-        <Header />
-        {children}
-        <Footer />
+        <ThemeProvider>
+          <Header />
+          <main className="flex-1 w-full">{children}</main>
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );
