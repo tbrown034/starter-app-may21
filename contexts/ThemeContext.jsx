@@ -5,7 +5,7 @@ import { createContext, use, useState, useEffect } from "react";
 const ThemeContext = createContext(null);
 
 export function ThemeProvider({ children }) {
-  const [theme, setThemeState] = useState("system");
+  const [theme, setThemeState] = useState(null); // null = system, "light" or "dark" = user override
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -13,18 +13,21 @@ export function ThemeProvider({ children }) {
 
     const initializeTheme = () => {
       try {
-        const savedTheme = localStorage.getItem("theme") || "system";
-        console.log("🎨 ThemeProvider: Found saved theme:", savedTheme);
+        const savedTheme = localStorage.getItem("theme"); // null if not set
+        console.log(
+          "🎨 ThemeProvider: Found saved theme:",
+          savedTheme || "system"
+        );
 
-        setThemeState(savedTheme);
+        setThemeState(savedTheme); // null for system, "light"/"dark" for user override
         applyTheme(savedTheme);
         setMounted(true);
 
         console.log("🎨 ThemeProvider: Theme system initialized successfully");
       } catch (error) {
         console.error("🎨 ThemeProvider: Error initializing theme:", error);
-        setThemeState("system");
-        applyTheme("system");
+        setThemeState(null);
+        applyTheme(null);
         setMounted(true);
       }
     };
@@ -35,10 +38,7 @@ export function ThemeProvider({ children }) {
   useEffect(() => {
     if (!mounted) return;
 
-    console.log(
-      "🎨 ThemeProvider: Setting up system theme listener for theme:",
-      theme
-    );
+    console.log("🎨 ThemeProvider: Setting up system theme listener");
 
     try {
       const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
@@ -49,25 +49,19 @@ export function ThemeProvider({ children }) {
           e.matches ? "dark" : "light"
         );
 
-        if (theme === "system") {
-          console.log(
-            "🎨 ThemeProvider: User is in system mode, applying system preference"
-          );
+        if (theme === null) {
+          console.log("🎨 ThemeProvider: Following system preference");
           document.documentElement.classList.toggle("dark", e.matches);
         } else {
           console.log(
-            "🎨 ThemeProvider: User has manual override, ignoring system change"
+            "🎨 ThemeProvider: User has override, ignoring system change"
           );
         }
       };
 
       mediaQuery.addEventListener("change", handleSystemThemeChange);
-      console.log("🎨 ThemeProvider: System theme listener added");
-
-      return () => {
+      return () =>
         mediaQuery.removeEventListener("change", handleSystemThemeChange);
-        console.log("🎨 ThemeProvider: System theme listener removed");
-      };
     } catch (error) {
       console.error(
         "🎨 ThemeProvider: Error setting up system theme listener:",
@@ -77,28 +71,24 @@ export function ThemeProvider({ children }) {
   }, [theme, mounted]);
 
   const applyTheme = (newTheme) => {
-    if (typeof window === "undefined") {
-      console.warn("🎨 ThemeProvider: applyTheme called on server, skipping");
-      return;
-    }
+    if (typeof window === "undefined") return;
 
-    console.log("🎨 ThemeProvider: Applying theme:", newTheme);
+    console.log("🎨 ThemeProvider: Applying theme:", newTheme || "system");
 
     try {
+      document.documentElement.classList.remove("light", "dark");
+
       if (newTheme === "light") {
         localStorage.setItem("theme", "light");
-        document.documentElement.classList.remove("dark");
         document.documentElement.classList.add("light");
         console.log("🎨 ThemeProvider: Light theme applied");
       } else if (newTheme === "dark") {
         localStorage.setItem("theme", "dark");
-        document.documentElement.classList.remove("light");
         document.documentElement.classList.add("dark");
         console.log("🎨 ThemeProvider: Dark theme applied");
       } else {
+        // null/system - remove stored preference and follow system
         localStorage.removeItem("theme");
-        document.documentElement.classList.remove("light", "dark");
-
         const isDarkSystem = window.matchMedia(
           "(prefers-color-scheme: dark)"
         ).matches;
@@ -110,20 +100,14 @@ export function ThemeProvider({ children }) {
       }
     } catch (error) {
       console.error("🎨 ThemeProvider: Error applying theme:", error);
-      try {
-        document.documentElement.classList.remove("dark");
-        document.documentElement.classList.add("light");
-        console.log("🎨 ThemeProvider: Fallback to light mode applied");
-      } catch (fallbackError) {
-        console.error("🎨 ThemeProvider: Even fallback failed:", fallbackError);
-      }
+      document.documentElement.classList.add("light");
     }
   };
 
   const setTheme = (newTheme) => {
     console.log("🎨 ThemeProvider: setTheme called with:", newTheme);
 
-    if (!["light", "dark", "system"].includes(newTheme)) {
+    if (newTheme !== null && !["light", "dark"].includes(newTheme)) {
       console.error("🎨 ThemeProvider: Invalid theme provided:", newTheme);
       return;
     }
@@ -140,12 +124,10 @@ export function ThemeProvider({ children }) {
     if (typeof window === "undefined") return "light";
 
     try {
-      if (theme === "system") {
-        const resolved = window.matchMedia("(prefers-color-scheme: dark)")
-          .matches
+      if (theme === null) {
+        return window.matchMedia("(prefers-color-scheme: dark)").matches
           ? "dark"
           : "light";
-        return resolved;
       }
       return theme;
     } catch (error) {
@@ -166,7 +148,7 @@ export function ThemeProvider({ children }) {
   };
 
   const value = {
-    theme,
+    theme: theme || "system", // For backwards compatibility, expose "system" when theme is null
     resolvedTheme: getResolvedTheme(),
     setTheme,
     mounted,
