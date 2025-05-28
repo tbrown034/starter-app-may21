@@ -70,11 +70,13 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased dark:bg-gray-900 flex flex-col items-center justify-between min-h-screen`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased dark:bg-gray-900 flex flex-col min-h-screen`}
       >
         <ThemeProvider>
           <Header />
-          <main className="flex-1 w-full">{children}</main>
+          <main className="flex-1 flex items-center justify-center w-full">
+            {children}
+          </main>
           <Footer />
         </ThemeProvider>
       </body>
